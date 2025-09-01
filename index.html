@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MG Capital — Secure Access</title>
+  <style>
+    body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#0a0b10,#1d1e2f);font-family:ui-sans-serif,Segoe UI,Roboto,Inter;color:#fff}
+    .login-box{background:#121320;padding:40px;border-radius:18px;box-shadow:0 8px 40px #0008;width:90%;max-width:360px;text-align:center}
+    h1{margin-bottom:20px;font-size:22px;color:#cfd6ff}
+    input{width:100%;padding:12px;border-radius:12px;border:1px solid #ffffff22;background:#0e1020;color:#fff;font-size:16px;margin-bottom:18px;outline:none}
+    input:focus{border-color:#6e7bff;box-shadow:0 0 0 2px #6e7bff44}
+    button{width:100%;padding:12px;border-radius:12px;border:none;cursor:pointer;font-size:16px;font-weight:600;
+      background:linear-gradient(135deg,#6e7bff,#45d1c4);color:#fff;box-shadow:0 6px 24px #0006;transition:.2s}
+    button:hover{transform:translateY(-2px);box-shadow:0 8px 28px #0008}
+    .error{color:#ff6b6b;font-size:14px;margin-top:10px;display:none}
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <form onsubmit="checkPwd(); return false;">
+      <h1>MG Capital Secure Login</h1>
+      <input type="password" id="pwd" placeholder="Enter password" autocomplete="current-password" />
+      <button id="enterBtn" type="submit">Enter</button>
+      <div id="err" class="error">Incorrect password</div>
+    </form>
+  </div>
+  </div>
+
+  <script>
+    const PASS = 'ultra2025';
+    function allow(){ sessionStorage.setItem('mgAuth','ok'); }
+    function checkPwd(){
+      const val = (document.getElementById('pwd').value || '').trim();
+      if(val === PASS){
+        allow();
+        window.location.href = 'investors.html';
+      } else {
+        const err = document.getElementById('err');
+        if(err) err.style.display = 'block';
+      }
+    }
+    // Enter key support (in case form handler is bypassed)
+    const pwd = document.getElementById('pwd');
+    if(pwd){
+      pwd.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); checkPwd(); }});
+      pwd.addEventListener('input', function(){ const err = document.getElementById('err'); if(err) err.style.display='none'; });
+    }
+    const btn = document.getElementById('enterBtn');
+    if(btn){ btn.addEventListener('click', checkPwd); }
+  </script>
+</body>
+</html>
