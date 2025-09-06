@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects — MG Capital CRM</title>
+  <style>
+    :root{--bg:#0a0b10;--card:#121320;--muted:#8b90a5;--text:#eef1ff;--accent:#6e7bff;--accent-2:#45d1c4;--danger:#ff6b6b;--success:#32d49e;--warning:#ffcc66;--ring:0 0 0 2px color-mix(in oklab, var(--accent), transparent 60%);--radius:18px}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Inter,system-ui;background:
+      radial-gradient(1000px 600px at -10% -10%, #2b2e74 0%, transparent 60%),
+      radial-gradient(900px 600px at 110% 10%, #0d5b64 0%, transparent 60%),
+      linear-gradient(180deg,#0a0b10,#0a0b10);color:var(--text)}
+
+    .container{width:100%;max-width:1200px;margin-inline:auto;padding:16px}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-weight:800;color:#fff;box-shadow:0 8px 30px #0008}
+    h1{font-size:clamp(18px,3vw,24px);margin:0}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{padding:8px 10px;border-radius:10px;border:1px solid #ffffff1a;background:#ffffff10;color:var(--text);cursor:pointer;transition:.2s;backdrop-filter:blur(6px);text-decoration:none;display:inline-block;text-align:center;font-size:13px}
+    .btn:hover{transform:translateY(-1px);background:#ffffff1a}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),#4b56f7);border-color:#0000;box-shadow:0 6px 24px #6e7bff33}
+    .btn.ghost{background:#ffffff08}
+
+    /* METRICS: force one-row on phones with tight typography */
+    .metrics{display:grid;gap:10px}
+    .card{background:linear-gradient(180deg,#101123,#0c0d18);border:1px solid #ffffff10;border-radius:16px;padding:10px;box-shadow:0 10px 30px #0006}
+    .metric{display:flex;flex-direction:column;gap:4px}
+    .metric h3{margin:0;color:#cfd6ff;font-weight:600;font-size:12px}
+    .metric .value{font-size:18px;font-weight:800;margin:2px 0 2px}
+    .muted{color:var(--muted);font-size:11px}
+    .pill{align-self:flex-start;margin-top:auto;font-size:10px;padding:4px 8px;border-radius:999px;background:#ffffff0f;border:1px solid #ffffff1a;white-space:nowrap}
+
+    /* Projects area */
+    .split{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    input,select,textarea{background:#0e1020;border:1px solid #ffffff1a;border-radius:10px;padding:8px 10px;color:#fff;outline:none;min-height:36px;font-size:13px}
+    input:focus,select:focus,textarea:focus{box-shadow:var(--ring);border-color:#6e7bff80}
+
+    #tableView{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    table{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:13px}
+    thead th{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#b4b8d6;text-align:left;padding:0 8px}
+    tbody tr{background:#0e1020;border:1px solid #ffffff14}
+    tbody td{padding:8px}
+    tbody tr td:first-child{border-top-left-radius:12px;border-bottom-left-radius:12px}
+    tbody tr td:last-child{border-top-right-radius:12px;border-bottom-right-radius:12px}
+    .nowrap{white-space:nowrap}
+
+    .stage{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;border:1px solid #ffffff1a;font-size:12px}
+    .s-Active{background:#1e4d3a30;border-color:#1e4d3a66}
+    .s-Proposed{background:#5b3c2215;border-color:#5b3c2244}
+    .s-In\ Development{background:#2a35600f;border-color:#2a356044}
+    .s-On\ Hold{background:#5b222230;border-color:#5b222266}
+
+    .board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .column{min-height:280px;background:#0e1020;border:1px solid #ffffff14;border-radius:16px;padding:10px}
+    .col-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:13px}
+    .card-mini{background:#11142a;border:1px solid #ffffff12;border-radius:12px;padding:8px;margin-bottom:8px;font-size:12px}
+
+    footer{opacity:.7;margin-top:14px;font-size:11px}
+
+    dialog{border:1px solid #ffffff2a;background:#0e1020;color:#fff;border-radius:14px;padding:0;width:min(720px,96vw);max-height:90vh;font-size:13px}
+    dialog::backdrop{background:#0008}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #ffffff1a;font-size:14px}
+    .modal-body{padding:12px 14px;display:grid;gap:8px;overflow:auto}
+    .modal-actions{display:flex;justify-content:flex-end;gap:8px;padding:10px 14px;border-top:1px solid #ffffff1a}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+    .tabs{display:flex;gap:6px;margin-top:6px;font-size:13px}
+    .tab{padding:6px 10px;border-radius:999px;border:1px solid #ffffff1a;background:#ffffff08;cursor:pointer}
+    .tab.active{background:linear-gradient(135deg,var(--accent),#4b56f7);border-color:#0000}
+
+    .hidden{display:none}
+    .right{margin-left:auto}
+
+    /* Responsive */
+    @media (max-width:1024px){
+      .metrics{grid-template-columns:repeat(4,1fr)}
+      .board{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width:640px){ /* iPhone */
+      .container{padding:12px}
+      .metrics{grid-template-columns:repeat(4,1fr)} /* keep 4-up on phones */
+      .metric h3{font-size:11px}
+      .metric .value{font-size:17px}
+      .board{grid-template-columns:1fr}
+      thead th{font-size:9px}
+      tbody td{padding:6px}
+      #tableView>table{min-width:600px}
+      .two{grid-template-columns:1fr}
+      input,select,textarea{min-height:40px;font-size:12px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">MG</div>
+        <div><h1>Investor & Project Pipeline</h1></div>
+      </div>
+      <div class="toolbar">
+        <a href="investors.html" class="btn ghost">Investors</a>
+        <a href="projects.html" class="btn primary">Projects</a>
+      </div>
+      <div class="toolbar">
+        <button class="btn primary" id="addBtn">+ Add Project</button>
+        <button class="btn ghost" id="exportBtn">Export</button>
+        <button class="btn ghost" id="importBtn">Import</button>
+        <button class="btn" id="backupBtn" title="Save a browser backup">Backup</button>
+        <button class="btn" id="restoreBtn" title="Restore last browser backup">Restore</button>
+        <button class="btn" id="toggleViewBtn" title="Toggle Table/Kanban">Toggle View</button>
+      </div>
+    </header>
+
+    <!-- METRICS (always 4-up on mobile) -->
+    <section class="metrics">
+      <div class="card">
+        <div class="metric"><div><h3>Total Projects</h3><div class="value" id="mCount">0</div></div><span class="pill" id="mActive">0 active</span></div>
+        <div class="muted">Across all portfolios.</div>
+      </div>
+      <div class="card">
+        <div class="metric"><div><h3>In Development</h3><div class="value" id="mDev">0</div></div><span class="pill">pipeline</span></div>
+        <div class="muted">Currently being developed.</div>
+      </div>
+      <div class="card">
+        <div class="metric"><div><h3>Proposed</h3><div class="value" id="mProp">0</div></div><span class="pill">ideas</span></div>
+        <div class="muted">Proposals & early concepts.</div>
+      </div>
+      <div class="card">
+        <div class="metric"><div><h3>On Hold</h3><div class="value" id="mHold">0</div></div><span class="pill">paused</span></div>
+        <div class="muted">Projects temporarily on hold.</div>
+      </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section class="card" style="margin-top:12px">
+      <div class="split">
+        <strong>Projects</strong>
+        <span class="right"></span>
+        <input id="q" placeholder="Search projects…" style="min-width:220px" />
+        <select id="statusFilter"></select>
+        <select id="sorter">
+          <option value="-updated">Sort: Recently updated</option>
+          <option value="name">Sort: Name A→Z</option>
+          <option value="status">Sort: Status</option>
+          <option value="type">Sort: Type</option>
+        </select>
+        <div class="tabs"><button class="tab active" data-view="table">Table</button><button class="tab" data-view="board">Board</button></div>
+      </div>
+
+      <div id="tableView" style="margin-top:10px">
+        <table>
+          <thead><tr><th>Project</th><th>Type</th><th>Status</th><th>Next Steps</th><th>Tags</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+
+      <div id="boardView" class="board hidden" style="margin-top:10px"></div>
+    </section>
+
+    <footer>Projects are saved locally in your browser. Export CSV for backups. — MG Capital</footer>
+  </div>
+
+  <!-- MODALS -->
+  <dialog id="modal"><form method="dialog">
+    <div class="modal-head"><strong id="modalTitle">Add Project</strong><button class="btn" value="close">✕</button></div>
+    <div class="modal-body">
+      <div class="two"><label>Project Name<br/><input id="p_name" required /></label><label>Type<br/><input id="p_type" placeholder="e.g., Healthcare / Real Estate"/></label></div>
+      <div class="two"><label>Status<br/>
+        <select id="p_status"></select>
+      </label><label>Tags<br/><input id="p_tags" placeholder="tax credits, HUD, hospitality"/></label></div>
+      <label>Next Steps<br/><textarea id="p_next" rows="4" placeholder="Actionable next steps"></textarea></label>
+      <label>Notes<br/><textarea id="p_notes" rows="4" placeholder="Context"></textarea></label>
+      <input id="p_id" type="hidden" />
+    </div>
+    <div class="modal-actions"><button class="btn" value="close">Cancel</button><button class="btn primary" id="saveBtn" value="default">Save</button></div>
+  </form></dialog>
+
+  <dialog id="confirmDlg"><form method="dialog">
+    <div class="modal-head"><strong>Confirm delete</strong><button class="btn" value="close">✕</button></div>
+    <div class="modal-body"><div>Delete this project?</div></div>
+    <div class="modal-actions"><button class="btn" value="close">Cancel</button><button class="btn primary" id="confirmYes" value="default">Delete</button></div>
+  </form></dialog>
+
+  <input type="file" id="filePicker" accept=".csv" style="display:none" />
+
+  <script>
+    const STATUSES=['Active','Proposed','In Development','On Hold'];
+    function uid(){return Math.random().toString(36).slice(2)+Date.now().toString(36)}
+    function csvCell(v){const s=String(v??'');return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}
+    function splitCSV(line){const out=[];let cur='';let inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(ch===','&&!inQ){out.push(cur);cur='';}else cur+=ch;}out.push(cur);return out}
+    function escapeHTML(s=''){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
+
+    // Storage
+    (function migrate(){try{const NEW='mgcrm_projects',OLD='projectsCRM';if(!localStorage.getItem(NEW)){const legacy=localStorage.getItem(OLD);if(legacy){localStorage.setItem(NEW,legacy);}}}catch{}})();
+    function loadProjects(){try{return JSON.parse(localStorage.getItem('mgcrm_projects')||'[]')}catch{return[]}}
+    function saveProjects(){const K='mgcrm_projects';localStorage.setItem(K+'_backup',localStorage.getItem(K)||'[]');localStorage.setItem(K,JSON.stringify(db));render()}
+
+    let db=loadProjects();
+    if(db.length===0){
+      db=[
+        {id:uid(),name:'MG Capital',type:'Investment / Holding',status:'Active',next:'Active focus: 921 Randolph Ave (Assisted Living conversion: Historic Tax Credits, HUD, adaptive reuse). Considering 1112 Church St & 1111 Main St consolidation (12-unit MF + commercial).',tags:'capital, portfolio',notes:'',updated:Date.now()-600000},
+        {id:uid(),name:'MG Cares Group Homes',type:'Residential Care',status:'In Development',next:'Launch 25 group homes in 3 years; integrate WIOA, YouthBuild, Apprenticeship Building America; build MG Cares Skilled Trades Academy.',tags:'workforce, grants',notes:'',updated:Date.now()-580000},
+        {id:uid(),name:'Tiger Sun: Restaurant & Lounge',type:'Hospitality / Entertainment',status:'Proposed',next:'Define concept, location shortlist, initial budgets.',tags:'F&B',notes:'',updated:Date.now()-560000},
+        {id:uid(),name:'Fuego Tropical',type:'Hospitality / Entertainment',status:'Proposed',next:'Menu/brand exploration; site scouting.',tags:'F&B',notes:'',updated:Date.now()-540000},
+        {id:uid(),name:'MG Media / Entertainment Ventures',type:'Entertainment / Media Production',status:'Active',next:'DJ bookings, festival & concert production, media branding, high-end AV partnerships.',tags:'media, AV',notes:'',updated:Date.now()-520000},
+        {id:uid(),name:'MG Healthcare & Assisted Living',type:'Healthcare / Real Estate Development',status:'Active',next:'Expand assisted living conversions; leverage Historic Tax Credits & HUD alignments.',tags:'healthcare, HUD, HTC',notes:'',updated:Date.now()-500000},
+        {id:uid(),name:'Altura Global Holdings → Grupo Ultracaribe',type:'International Trade / Global Trading',status:'Active',next:'Scale eel exports (DR, Haiti, Colombia → Hong Kong); expand agricultural exports; gov licensing & compliance; investor onboarding.',tags:'exports, licensing',notes:'',updated:Date.now()-480000},
+        {id:uid(),name:'MG Productions & Events',type:'Entertainment / Production',status:'Active',next:'DJ Ed & agency bookings; ethnic weddings; AV rentals; partner with Dotson Entertainment (high-end AV/FX).',tags:'events, AV',notes:'',updated:Date.now()-460000},
+        {id:uid(),name:'Luxehill Concierge & Stays',type:'Hospitality / Concierge & Short-Term Stays',status:'In Development',next:'Build luxury STR portfolio (Lynchburg & beyond); target $50K/mo; add VIP spa, travel & lifestyle concierge.',tags:'STR, concierge',notes:'',updated:Date.now()-440000},
+        {id:uid(),name:'MG Hospitality Ventures',type:'Hospitality / Real Estate',status:'Proposed',next:'Explore boutique hotel / resort partnerships; align with MG Capital funding.',tags:'hospitality',notes:'',updated:Date.now()-420000},
+        {id:uid(),name:'MG Real Estate Development',type:'Real Estate / Mixed-Use Development',status:'Active',next:'Continue acquisitions & redevelopment; owner-financing and tax credit structures.',tags:'mixed-use, tax credits',notes:'',updated:Date.now()-400000},
+        {id:uid(),name:'Jack Edma: Strategic Investment Portfolio',type:'Multi-Sector Business Portfolio',status:'Active',next:'Curate partnerships and scale across healthcare, hospitality, international trade, and real estate.',tags:'portfolio',notes:'',updated:Date.now()-380000}
+      ];
+      saveProjects();
+    }
+
+    const rowsEl=document.getElementById('rows');
+    const boardEl=document.getElementById('boardView');
+    const statusFilter=document.getElementById('statusFilter');
+
+    function populateStatuses(){
+      statusFilter.innerHTML='<option value="">All statuses</option>'+STATUSES.map(s=>`<option>${s}</option>`).join('');
+      document.getElementById('p_status').innerHTML=STATUSES.map(s=>`<option>${s}</option>`).join('');
+    }
+    populateStatuses();
+
+    function render(){
+      const q=(document.getElementById('q')?.value||'').toLowerCase();
+      const stageSel=statusFilter?.value||'';
+      const sorter=document.getElementById('sorter')?.value||'-updated';
+      let items=db.filter(x=>{const hay=[x.name,x.type,x.status,x.tags,x.next].join(' ').toLowerCase();return(!q||hay.includes(q))&&(!stageSel||x.status===stageSel)});
+      items.sort((a,b)=>{switch(sorter){case 'name':return(a.name||'').localeCompare(b.name||'');case 'status':return STATUSES.indexOf(a.status)-STATUSES.indexOf(b.status);case 'type':return (a.type||'').localeCompare(b.type||'');default:return (b.updated||0)-(a.updated||0)}});
+      rowsEl.innerHTML=items.map(rowHTML).join('');
+      boardEl.innerHTML=STATUSES.map(stage=>{const list=items.filter(x=>x.status===stage);return `<div class="column" data-stage="${stage}"><div class="col-head"><strong>${stage}</strong><span class="pill">${list.length}</span></div>${list.map(cardHTML).join('')}</div>`;}).join('');
+      const total=db.length,active=db.filter(x=>x.status==='Active').length,dev=db.filter(x=>x.status==='In Development').length,prop=db.filter(x=>x.status==='Proposed').length,hold=db.filter(x=>x.status==='On Hold').length;
+      document.getElementById('mCount').textContent=total;document.getElementById('mActive').textContent=`${active} active`;document.getElementById('mDev').textContent=dev;document.getElementById('mProp').textContent=prop;document.getElementById('mHold').textContent=hold;
+    }
+
+    function rowHTML(x){return `<tr>
+      <td><strong>${escapeHTML(x.name)}</strong></td>
+      <td>${escapeHTML(x.type||'')}</td>
+      <td><span class="stage s-${x.status.replace(/ /g,'\\ ')}">${escapeHTML(x.status)}</span></td>
+      <td>${escapeHTML(x.next||'')}</td>
+      <td>${escapeHTML(x.tags||'')}</td>
+      <td class="nowrap" style="text-align:right">
+        <button class="btn ghost" type="button" onclick='openEdit("${x.id}")'>Edit</button>
+        <button class="btn" type="button" onclick='advance("${x.id}")'>Advance ▶</button>
+        <button class="btn" type="button" onclick='confirmDel("${x.id}")' style="border-color:#ff6b6b66">Delete</button>
+      </td>
+    </tr>`}
+
+    function cardHTML(x){return `<div class="card-mini">
+      <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+        <div><strong>${escapeHTML(x.name)}</strong><div class="muted" style="font-size:12px">${escapeHTML(x.type||'')}</div></div>
+        <button class="btn" type="button" onclick='openEdit("${x.id}")'>Edit</button>
+      </div>
+      <div class="muted" style="margin-top:6px;font-size:12px">${escapeHTML(x.next||'—')}</div>
+      ${x.tags?`<div class="split" style="margin-top:8px"><span class="pill">${escapeHTML(x.tags)}</span></div>`:''}
+    </div>`}
+
+    document.getElementById('addBtn').addEventListener('click',()=>openEdit());
+    function openEdit(id){const m=document.getElementById('modal');const item=db.find(x=>x.id===id)||{id:'',name:'',type:'',status:STATUSES[0],next:'',tags:'',notes:''};document.getElementById('modalTitle').textContent=item.id?'Edit Project':'Add Project';document.getElementById('p_id').value=item.id;p_name.value=item.name;p_type.value=item.type;p_status.value=item.status;p_next.value=item.next;p_tags.value=item.tags;p_notes.value=item.notes;m.showModal()}
+    document.getElementById('saveBtn').addEventListener('click',e=>{e.preventDefault();const id=document.getElementById('p_id').value||uid();const obj={id,name:p_name.value.trim(),type:p_type.value.trim(),status:p_status.value,next:p_next.value.trim(),tags:p_tags.value.trim(),notes:p_notes.value.trim(),updated:Date.now()};const ix=db.findIndex(x=>x.id===id);if(ix>-1)db[ix]=obj;else db.push(obj);saveProjects();document.getElementById('modal').close()});
+
+    function advance(id){const x=db.find(r=>r.id===id);if(!x)return;const idx=STATUSES.indexOf(x.status);x.status=STATUSES[Math.min(STATUSES.length-1,idx+1)];x.updated=Date.now();saveProjects()}
+
+    let pendingId=null;function confirmDel(id){pendingId=id;document.getElementById('confirmDlg').showModal()}
+    document.getElementById('confirmYes').addEventListener('click',e=>{e.preventDefault();if(!pendingId){document.getElementById('confirmDlg').close();return;}db=db.filter(x=>x.id!==pendingId);saveProjects();pendingId=null;document.getElementById('confirmDlg').close()});
+
+    ['q','statusFilter','sorter'].forEach(id=>document.getElementById(id).addEventListener('input',render));
+    document.querySelectorAll('.tab[data-view]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab[data-view]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const view=btn.dataset.view;document.getElementById('tableView').classList.toggle('hidden',view!=='table');document.getElementById('boardView').classList.toggle('hidden',view!=='board')}));
+    document.getElementById('toggleViewBtn').addEventListener('click',()=>{const isTable=!document.getElementById('tableView').classList.contains('hidden');document.querySelector(`.tab[data-view="${isTable?'board':'table'}"]`).click()});
+
+    document.getElementById('exportBtn').addEventListener('click',()=>{const headers=['id','name','type','status','next','tags','notes','updated'];const rows=[headers.join(',')].concat(db.map(o=>headers.map(h=>csvCell(o[h])).join(',')));const blob=new Blob([rows.join('\n')],{type:'text/csv'});const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:'projects.csv'});document.body.appendChild(a);a.click();a.remove()});
+    const fp=document.getElementById('filePicker');document.getElementById('importBtn').addEventListener('click',()=>fp.click());
+    fp.addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;const text=await file.text();const lines=text.split(/\r?\n/).filter(Boolean);if(!lines.length)return;const headers=lines.shift().split(',').map(h=>h.trim());const idx=k=>headers.indexOf(k);for(const line of lines){const parts=splitCSV(line);const o={id:parts[idx('id')]||uid(),name:parts[idx('name')]||'',type:parts[idx('type')]||'',status:parts[idx('status')]||STATUSES[0],next:parts[idx('next')]||'',tags:parts[idx('tags')]||'',notes:parts[idx('notes')]||'',updated:+(parts[idx('updated')]||Date.now())};const i=db.findIndex(x=>x.id===o.id);if(i>-1)db[i]=o;else db.push(o);}saveProjects();fp.value=''});
+
+    document.getElementById('backupBtn').addEventListener('click',()=>{try{localStorage.setItem('mgcrm_projects_backup',JSON.stringify(db));alert('Backup saved in this browser.');}catch{alert('Could not save backup.')}});
+    document.getElementById('restoreBtn').addEventListener('click',()=>{const snap=localStorage.getItem('mgcrm_projects_backup');if(!snap){alert('No backup found.');return;}try{db=JSON.parse(snap)||[];saveProjects();alert('Restored from browser backup.');}catch{alert('Backup was unreadable.')}});
+
+    render();
+  </script>
+</body>
+</html>
