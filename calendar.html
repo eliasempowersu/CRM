@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <title>Calendar — MG Capital CRM</title>
+  <style>
+    :root{--bg:#0a0b10;--card:#121320;--muted:#8b90a5;--text:#eef1ff;--accent:#6e7bff;--accent-2:#45d1c4;--danger:#ff6b6b;--success:#32d49e;--warning:#ffcc66;--ring:0 0 0 2px color-mix(in oklab,var(--accent),transparent 60%);--radius:18px}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Inter,system-ui;background:radial-gradient(1000px 600px at -10% -10%,#2b2e74 0%,transparent 60%),radial-gradient(900px 600px at 110% 10%,#0d5b64 0%,transparent 60%),linear-gradient(180deg,#0a0b10,#0a0b10);color:var(--text)}
+
+    .container{width:100%;max-width:1200px;margin-inline:auto;padding:16px}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-weight:800;color:#fff;box-shadow:0 8px 30px #0008}
+    h1{font-size:clamp(20px,3vw,26px);margin:0}
+
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{padding:10px 12px;border-radius:12px;border:1px solid #ffffff1a;background:#ffffff10;color:var(--text);cursor:pointer;transition:.2s;backdrop-filter:blur(6px);text-decoration:none;display:inline-block;text-align:center;font-size:14px}
+    .btn:hover{transform:translateY(-1px);background:#ffffff1a}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),#4b56f7);border-color:#0000;box-shadow:0 6px 24px #6e7bff33}
+    .btn.ghost{background:#ffffff08}
+
+    .tabs{display:flex;gap:8px}
+    .tab{padding:6px 12px;border-radius:999px;border:1px solid #ffffff22;background:#ffffff0f;cursor:pointer}
+    .tab.active{background:linear-gradient(135deg,var(--accent),#4b56f7);border-color:transparent}
+
+    .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+    .card{background:linear-gradient(180deg,#101123,#0c0d18);border:1px solid #ffffff10;border-radius:18px;padding:12px;box-shadow:0 10px 30px #0006}
+
+    /* Day */
+    .day-list{display:grid;gap:10px}
+    .event{display:flex;justify-content:space-between;align-items:center;background:#11142a;border:1px solid #ffffff12;border-radius:14px;padding:10px}
+    .event .meta{font-size:12px;color:#b4b8d6}
+
+    /* Week */
+    .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+    .week-col{background:#0e1020;border:1px solid #ffffff14;border-radius:14px;min-height:180px;padding:8px}
+    .col-head{font-size:12px;color:#cfd6ff;margin-bottom:6px;display:flex;justify-content:space-between}
+
+    /* Month */
+    .month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+    .day-cell{background:#0e1020;border:1px solid #ffffff14;border-radius:12px;min-height:90px;padding:6px;display:flex;flex-direction:column}
+    .dnum{font-size:12px;opacity:.8;margin-bottom:4px}
+    .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-2);display:inline-block;margin-right:3px}
+
+    /* Year Kanban */
+    .year-board{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
+    .ycol{background:#0e1020;border:1px solid #ffffff14;border-radius:14px;padding:10px}
+    .ycol h4{margin:0 0 8px 0;font-size:14px;color:#cfd6ff}
+    .pill{display:inline-flex;gap:6px;align-items:center;border:1px solid #ffffff20;background:#ffffff10;border-radius:999px;padding:4px 8px;font-size:12px;margin:4px 4px 0 0}
+
+    @media (min-width:900px){
+      .year-board{grid-template-columns:repeat(4,1fr)}
+    }
+
+    /* Utility */
+    .muted{color:#8b90a5}
+    .spacer{flex:1}
+    input[type="date"], select{background:#0e1020;border:1px solid #ffffff22;border-radius:10px;color:var(--text);padding:8px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">MG</div>
+        <div><h1>Investor & Project Pipeline</h1></div>
+      </div>
+      <div class="toolbar">
+        <a href="projects.html" class="btn ghost">Projects</a>
+        <a href="investors.html" class="btn ghost">Investors</a>
+        <a href="calendar.html" class="btn primary">Calendar</a>
+      </div>
+    </header>
+
+    <section class="card" style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <div class="tabs">
+        <button class="tab active" data-view="day">Day</button>
+        <button class="tab" data-view="week">Week</button>
+        <button class="tab" data-view="month">Month</button>
+        <button class="tab" data-view="year">Year</button>
+      </div>
+      <div class="spacer"></div>
+      <div class="controls">
+        <button class="btn" id="prevBtn">◀</button>
+        <strong id="rangeLabel">Today</strong>
+        <button class="btn" id="nextBtn">▶</button>
+        <input type="date" id="datePicker" />
+      </div>
+    </section>
+
+    <!-- Day View -->
+    <section id="view-day" class="card">
+      <div class="day-list" id="dayList"></div>
+    </section>
+
+    <!-- Week View -->
+    <section id="view-week" class="card" style="display:none">
+      <div class="week-grid" id="weekGrid"></div>
+    </section>
+
+    <!-- Month View -->
+    <section id="view-month" class="card" style="display:none">
+      <div class="month-grid" id="monthGrid"></div>
+    </section>
+
+    <!-- Year (Kanban by month) -->
+    <section id="view-year" class="card" style="display:none">
+      <div class="year-board" id="yearBoard"></div>
+    </section>
+  </div>
+
+  <script>
+    // --- Data helpers (reads Projects & Investors from localStorage) ---
+    const getLS = (k, d=[]) => { try { return JSON.parse(localStorage.getItem(k)||'null') ?? d; } catch { return d; } };
+    function toEvents(){
+      const p = getLS('mgcrm_projects',[]).map(x=>({
+        type:'Project', title:x.name||x.project||'Project', next:x.next||x.nextSteps||x.next_step||'',
+        due:x.due||x.dueDate||x.due_date||'', amount:x.amount||x.commit||'', status:x.status||'Active'
+      }));
+      const i = getLS('mgcrm_investors',[]).map(x=>({
+        type:'Investor', title:x.name||'Investor', next:x.next||'', due:x.due||'', amount:x.commit||'', status:x.status||'Pending'
+      }));
+      return [...p, ...i].filter(e=>e.due);
+    }
+    const fmtUSD = n => (Number(n)||0).toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+
+    // --- Date utilities ---
+    const pad=n=>String(n).padStart(2,'0');
+    const toKey = d=> `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    const fromISO = s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+    const startOfWeek = d=>{const t=new Date(d);const day=(t.getDay()+6)%7; t.setDate(t.getDate()-day); t.setHours(0,0,0,0); return t}; // Monday
+    const addDays=(d,n)=>{const t=new Date(d); t.setDate(t.getDate()+n); return t};
+
+    // --- State ---
+    let current = new Date();
+    let mode = 'day';
+
+    // --- Render functions ---
+    function render(){
+      document.getElementById('rangeLabel').textContent = label();
+      // toggle views
+      ['day','week','month','year'].forEach(v=>{
+        document.getElementById('view-'+v).style.display = (v===mode)?'block':'none';
+        document.querySelector(`[data-view="${v}"]`).classList.toggle('active', v===mode);
+      });
+      const events = toEvents();
+      if(mode==='day') renderDay(events);
+      if(mode==='week') renderWeek(events);
+      if(mode==='month') renderMonth(events);
+      if(mode==='year') renderYear(events);
+      document.getElementById('datePicker').value = toKey(current);
+    }
+
+    function label(){
+      if(mode==='day'){ return current.toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'}); }
+      if(mode==='week'){
+        const s = startOfWeek(current), e = addDays(s,6);
+        return `${s.toLocaleDateString(undefined,{month:'short', day:'numeric'})} – ${e.toLocaleDateString(undefined,{month:'short', day:'numeric'})}`;
+      }
+      if(mode==='month'){
+        return current.toLocaleDateString(undefined,{month:'long', year:'numeric'});
+      }
+      if(mode==='year') return String(current.getFullYear());
+    }
+
+    // --- Day ---
+    function renderDay(events){
+      const key = toKey(current);
+      const list = events.filter(e=>e.due===key);
+      const box = document.getElementById('dayList');
+      if(list.length===0){ box.innerHTML = `<div class="muted">No items due today.</div>`; return; }
+      box.innerHTML = list.map(ev=>`<div class="event">
+        <div>
+          <div><strong>${ev.title}</strong> <span class="muted">(${ev.type})</span></div>
+          <div class="meta">Next: ${ev.next||'—'}</div>
+        </div>
+        <div class="muted">${ev.amount?fmtUSD(ev.amount):''}</div>
+      </div>`).join('');
+    }
+
+    // --- Week ---
+    function renderWeek(events){
+      const grid = document.getElementById('weekGrid');
+      const s = startOfWeek(current);
+      let html = '';
+      for(let i=0;i<7;i++){
+        const d = addDays(s,i), key = toKey(d);
+        const list = events.filter(e=>e.due===key);
+        html += `<div class="week-col">
+          <div class="col-head"><span>${d.toLocaleDateString(undefined,{weekday:'short'})}</span><span>${d.getDate()}</span></div>
+          ${list.map(ev=>`<div class="pill">${ev.type}: ${ev.title}</div>`).join('') || `<div class="muted">—</div>`}
+        </div>`;
+      }
+      grid.innerHTML = html;
+    }
+
+    // --- Month ---
+    function renderMonth(events){
+      const grid = document.getElementById('monthGrid');
+      const y = current.getFullYear(), m = current.getMonth();
+      const first = new Date(y,m,1); const start = addDays(first, -((first.getDay()+6)%7));
+      const cells = [];
+      for(let i=0;i<42;i++){ const d=addDays(start,i); const key=toKey(d); const inMonth = d.getMonth()===m; const list = events.filter(e=>e.due===key);
+        cells.push(`<div class="day-cell" style="opacity:${inMonth?1:.5}">
+          <div class="dnum">${d.getDate()}</div>
+          <div>
+            ${list.map(ev=>`<span class="dot" title="${ev.type}: ${ev.title}"></span>`).join('')}
+          </div>
+        </div>`);
+      }
+      grid.innerHTML = cells.join('');
+    }
+
+    // --- Year (Kanban by month) ---
+    function renderYear(events){
+      const board = document.getElementById('yearBoard');
+      const y = current.getFullYear();
+      let html='';
+      for(let m=0;m<12;m++){
+        const monthName = new Date(y,m,1).toLocaleDateString(undefined,{month:'short'});
+        const list = events.filter(e=>{ const d=fromISO(e.due); return d.getFullYear()===y && d.getMonth()===m; });
+        html += `<div class="ycol">
+          <h4>${monthName} <span class="muted">${list.length}</span></h4>
+          ${list.map(ev=>`<div class="pill">${ev.type}: ${ev.title}</div>`).join('') || `<div class="muted">—</div>`}
+        </div>`;
+      }
+      board.innerHTML = html;
+    }
+
+    // --- Nav & interactions ---
+    document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{ mode=btn.dataset.view; render(); }));
+    document.getElementById('prevBtn').addEventListener('click',()=>{ if(mode==='day') current=addDays(current,-1); if(mode==='week') current=addDays(current,-7); if(mode==='month') current=new Date(current.getFullYear(), current.getMonth()-1, 1); if(mode==='year') current=new Date(current.getFullYear()-1,0,1); render(); });
+    document.getElementById('nextBtn').addEventListener('click',()=>{ if(mode==='day') current=addDays(current,1); if(mode==='week') current=addDays(current,7); if(mode==='month') current=new Date(current.getFullYear(), current.getMonth()+1, 1); if(mode==='year') current=new Date(current.getFullYear()+1,0,1); render(); });
+    document.getElementById('datePicker').addEventListener('change',e=>{ current = fromISO(e.target.value); render(); });
+
+    // Init with today
+    current = new Date(); render();
+  </script>
+</body>
+</html>
